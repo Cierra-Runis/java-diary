@@ -142,11 +142,12 @@ public class Page extends Application {
             if (dateFromDateWindow != null) {
                 stage.close();
                 Diary newDiary = new Diary(dateFromDateWindow);
-                //TODO: 利用 Editor 界面编辑这个 newDiary (下行的功能应该写在 Editor 里)
-                newDiary.saveDiary("114", "text");
+                new Editor(dateFromDateWindow).display();
                 new Page(dateFromDateWindow).start(new Stage());
+                stage.close();
+            } else {
+                new Page().start(new Stage());
             }
-            stage.setOpacity(0.9);
         });
 
         //工具底衬
@@ -324,9 +325,11 @@ public class Page extends Application {
         edit.setOnMouseReleased(mouseEvent -> edit.setBackground(new Background(new BackgroundImage(EDIT_UNPRESSED, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(30, 30, false, false, false, false)))));
         edit.setOnMouseExited(mouseEvent -> edit.setBackground(new Background(new BackgroundImage(EDIT_UNPRESSED, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(30, 30, false, false, false, false)))));
         edit.setOnMouseClicked(mouseEvent -> {
-            stage.setOpacity(0);
-            new Editor(date).display();
-            stage.setOpacity(0.9);
+            if (!Objects.equals(date, "197801010600")) {
+                stage.close();
+                new Editor(date).display();
+                new Page(date).start(new Stage());
+            }
         });
 
         //工具底衬

@@ -51,7 +51,9 @@ public class Editor {
         save.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-
+                Diary newDiary = new Diary(date);
+                newDiary.saveDiary(title, textArea.getText());
+                stage.close();
             }
         });
 

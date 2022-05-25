@@ -34,6 +34,7 @@ public class Diary {
             FileWriter fileWriter = new FileWriter(file);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.write(text);
+            System.out.println("写进去了");
             bufferedWriter.close();
             fileWriter.close();
         } catch (IOException e) {
