@@ -140,7 +140,7 @@ public class Page extends Application {
             stage.setOpacity(0.6);
             String dateFromDateWindow = DateWindow.display();
             stage.close();
-            if (dateFromDateWindow != null) {
+            if (dateFromDateWindow != null && !dateFromDateWindow.equals("")) {
                 new Editor(dateFromDateWindow).display();
                 new Page(dateFromDateWindow).start(new Stage());
             } else {
@@ -271,6 +271,26 @@ public class Page extends Application {
                     Middle.setLayoutY(30);
                 }
             }
+
+        });
+        Middle.setOnScroll(scrollEvent -> {
+
+            y1 -= scrollEvent.getDeltaY();
+            y_stage = Middle.getLayoutY();
+
+            if ((HOMEPAGE_HEIGHT - UpMiddle.getHeight() - DownMiddle.getHeight() - 50) >= 30) {
+                System.out.println("不滑动");
+            } else {
+                Middle.setLayoutY(y_stage + scrollEvent.getDeltaY() - y1);
+                if (Middle.getLayoutY() < (HOMEPAGE_HEIGHT - UpMiddle.getHeight() - DownMiddle.getHeight() - 50)) {
+                    Middle.setLayoutY(HOMEPAGE_HEIGHT - UpMiddle.getHeight() - DownMiddle.getHeight() - 50);
+                }
+                if (Middle.getLayoutY() > 30) {
+                    Middle.setLayoutY(30);
+                }
+            }
+
+            y1 = 0;
 
         });
         Middle.setOnMousePressed(mouseEvent -> {

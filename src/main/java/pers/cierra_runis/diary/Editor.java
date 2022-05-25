@@ -2,12 +2,14 @@ package pers.cierra_runis.diary;
 
 
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -15,12 +17,19 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.util.Objects;
+
 import static pers.cierra_runis.diary.SystemInfo.*;
 
 public class Editor {
+
     static String date;
     static String title;
     static String text;
+    double x1;
+    double y1;
+    double x_stage;
+    double y_stage;
 
     public Editor(String inputDate) {
         date = inputDate;
@@ -46,8 +55,35 @@ public class Editor {
         save.setAlignment(Pos.CENTER);
         save.getChildren().add(textInSaveButton);
 
+        //标题底衬
+        HBox Title = new HBox(new Label());
+        Title.setPrefWidth(EDITOR_WIDTH);
+        Title.setPrefHeight(36);
+        Title.setBackground(BG_DARKER);
+        Title.setAlignment(Pos.CENTER);
+        Title.setOnMouseDragged(mouseEvent -> {
+            stage.setX(x_stage + mouseEvent.getScreenX() - x1);
+            stage.setY(y_stage + mouseEvent.getScreenY() - y1);
+        });
+        Title.setOnMousePressed(mouseEvent -> {
+            x1 = mouseEvent.getScreenX();
+            y1 = mouseEvent.getScreenY();
+            x_stage = stage.getX();
+            y_stage = stage.getY();
+        });
+
         TextArea textArea = new TextArea();
+        textArea.setLayoutX(0.1 * EDITOR_WIDTH);
+        textArea.setLayoutY(40);
+        textArea.setPrefWidth(0.8 * EDITOR_WIDTH);
+        textArea.setPrefHeight(EDITOR_HEIGHT - 40 - 30);
+        textArea.setFocusTraversable(Objects.equals(textArea.getText(), "") || textArea.getText() == null);
         textArea.setWrapText(true);
+        textArea.setBackground(BG_DARK);
+        textArea.setBorder(new Border(new BorderStroke(PAINT_DARK, PAINT_DARK, PAINT_LIGHTDARK, PAINT_DARK, BorderStrokeStyle.NONE, BorderStrokeStyle.NONE, BorderStrokeStyle.SOLID, BorderStrokeStyle.NONE, CornerRadii.EMPTY, BorderWidths.DEFAULT, Insets.EMPTY)));
+        textArea.setStyle("-fx-text-fill: white");
+        textArea.setFont(new Font(FONT_SC_BOLD.getName(), 15));
+
         save.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -64,6 +100,7 @@ public class Editor {
 
         Group group = new Group();
         group.getChildren().add(Body);
+        group.getChildren().add(Title);
         group.getChildren().add(textArea);
         group.getChildren().add(save);
 
