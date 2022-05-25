@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="diary">
+    <output-path>$PROJECT_DIR$/out/artifacts/diary</output-path>
+    <root id="archive" name="diary.jar">
+      <element id="archive" name="diary.jar">
+        <element id="module-output" name="diary" />
+      </element>
+    </root>
+  </artifact>
+</component>
