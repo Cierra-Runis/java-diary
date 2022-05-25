@@ -139,12 +139,10 @@ public class Page extends Application {
         add.setOnMouseClicked(mouseEvent -> {
             stage.setOpacity(0.6);
             String dateFromDateWindow = DateWindow.display();
+            stage.close();
             if (dateFromDateWindow != null) {
-                stage.close();
-                Diary newDiary = new Diary(dateFromDateWindow);
                 new Editor(dateFromDateWindow).display();
                 new Page(dateFromDateWindow).start(new Stage());
-                stage.close();
             } else {
                 new Page().start(new Stage());
             }

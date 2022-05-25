@@ -21,12 +21,10 @@ public class AlertWindow {
         Button btn2 = new Button("否");
         btn1.setOnMouseClicked(event -> {
             result = true;
-            System.out.println("确认删除");
             stage.close();
         });
         btn2.setOnMouseClicked(event -> {
             result = false;
-            System.out.println("取消删除");
             stage.close();
         });
         VBox vBox = new VBox();

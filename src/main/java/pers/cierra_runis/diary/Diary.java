@@ -6,10 +6,10 @@ import java.util.Objects;
 public class Diary {
 
     String date;
-    String title;
+    String title = "无标题";
     String text = "";
 
-    //TODO: 添加图片显示功能
+//    TODO: 添加图片显示功能
 //    int imageIndex = 0;
 //    Image[] images;
 //    String[] images_name;
@@ -34,7 +34,6 @@ public class Diary {
             FileWriter fileWriter = new FileWriter(file);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.write(text);
-            System.out.println("写进去了");
             bufferedWriter.close();
             fileWriter.close();
         } catch (IOException e) {
