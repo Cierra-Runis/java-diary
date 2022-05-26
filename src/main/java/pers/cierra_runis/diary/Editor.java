@@ -121,7 +121,7 @@ public class Editor {
 
         save.setOnMouseClicked(mouseEvent -> {
             diaryInEditor.time = Base.backTime();
-            diaryInEditor.titleString = textArea.getText();
+            diaryInEditor.titleString = textField.getText();
             diaryInEditor.textString = textArea.getText();
             diaryInEditor.saveDiary();
             if (!Objects.equals(diaryInEditor.date, toDate)) {
