@@ -163,32 +163,14 @@ public class DateWindow {
                 System.out.println("请先输入月份");
                 day.requestFocus();
             } else {
-                String hour = String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
-                if (hour.length() == 1) {
-                    hour = "0" + hour;
-                }
-                String minute = String.valueOf(calendar.get(Calendar.MINUTE));
-                if (minute.length() == 1) {
-                    minute = "0" + minute;
-                }
-                String second = String.valueOf(calendar.get(Calendar.SECOND));
-                if (second.length() == 1) {
-                    second = "0" + second;
-                }
 
-                String s = year.getText() + month.getText() + day.getText();
-                String str = s + hour + minute + second;
-
-                //保险的判断
-                if (Base.isDate(str)) {
-                    if (new Diary(str).isDateExisted(s)) {
-                        System.out.println("日期已存在");
-                    } else {
-                        date = str;
-                        stage.close();
-                    }
+                String enteredDate = year.getText() + month.getText() + day.getText();
+                String timeStamp = enteredDate + "000000";
+                if (Base.isTimeStamp(timeStamp)) {
+                    date = enteredDate;
+                    stage.close();
                 } else {
-                    System.out.println("注意，程序不应进行到这里");
+                    System.out.println("注意！");
                 }
 
             }

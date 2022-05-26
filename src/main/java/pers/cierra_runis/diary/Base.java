@@ -9,7 +9,8 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class Base {
-    public static boolean isDate(String dateStr) {
+
+    public static boolean isTimeStamp(String dateStr) {
         String timeRegex = "((([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})(((0[13578]|1[02])(0[1-9]|[12][0-9]|3[01]))|" +
                 "((0[469]|11)(0[1-9]|[12][0-9]|30))|(02(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))0229))" +
                 "([0-1][0-9]|2[0-3])([0-5][0-9])([0-5][0-9])$";
@@ -70,6 +71,26 @@ public class Base {
         Calendar c = Calendar.getInstance();
         c.set(year, month, 0); //输入类型为int类型
         return c.get(Calendar.DAY_OF_MONTH);
+    }
+
+    public static String backTime() {
+
+        Calendar calendar = Calendar.getInstance();
+
+        String hour = String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
+        if (hour.length() == 1) {
+            hour = "0" + hour;
+        }
+        String minute = String.valueOf(calendar.get(Calendar.MINUTE));
+        if (minute.length() == 1) {
+            minute = "0" + minute;
+        }
+        String second = String.valueOf(calendar.get(Calendar.SECOND));
+        if (second.length() == 1) {
+            second = "0" + second;
+        }
+
+        return hour + minute + second;
     }
 
 }

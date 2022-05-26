@@ -5,116 +5,131 @@ import java.util.Objects;
 
 public class Diary {
 
-    String date;
-    String title = "无标题";
-    String text = "";
+    String date;                                    //date 年月日，例如 19000101
+    String time = "0000";                           //time 时间，例如 0000
+    String titleString = "无标题";                   //titleString 标题字符串
+    String textString = "";                         //textString 文本字符串直接储存所有文本信息
 
-//    TODO: 添加图片显示功能
-//    int imageIndex = 0;
-//    Image[] images;
-//    String[] images_name;
-
+    //这里要求 date 合法
     public Diary(String date) {
         this.date = date;
-        if (Base.isDate(date)) {
-            readDiary();
-        } else {
-            this.date = "197801010600";
-        }
     }
 
-    public void saveDiary(String inputTitle, String inputText) {
+    //存储这个类中的所有信息
+    public void saveDiary() {
 
-        if (isDateExisted(date.substring(0, 8))) {
-            System.out.println("删 " + date + " 啊");
-            Base.delFiles(new File("diarys/" + date));
+        //如果这个类的 date 已经存在，那么我们删去原先的
+        //对于 添加日记 已在 DateWindow 保证上述情形不存在，这是为了 编辑日记 而编写的
+        if (isDateExisted(date)) {
+            System.out.printf("所想保存日记的 timeStamp (%s) 对应的 date 已经存在，正在删除原先日记\n", date + time);
+            deleteDiary();
         }
 
-
-        File dir = new File("diarys/");
+        time = Base.backTime();
+        File dir = new File("diarys/" + date + time);
         if (dir.mkdir()) {
-            System.out.println("文件夹创建成功");
+            System.out.printf("%s 的文件夹已于 %s 创建成功\n", date, time);
         }
-        File file = new File("diarys/" + date + "/" + inputTitle + ".txt");
+        File file = new File("diarys/" + date + time + "/" + titleString + ".txt");
         try {
             FileWriter fileWriter = new FileWriter(file);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            bufferedWriter.write(inputText);
+            bufferedWriter.write(textString);
             bufferedWriter.close();
             fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        readDiary();
+    }
+
+    public void deleteDiary() {
+
+        File diarysFile = new File("diarys/");
+        File[] filesInDiarysFile = diarysFile.listFiles();
+
+        for (File file : Objects.requireNonNull(filesInDiarysFile)) {
+            //当 file 是文件夹且 date 对的上时
+            if (file.isDirectory() && file.getName().substring(0, 8).equals(date)) {
+                System.out.printf("已删除 %s 文件夹\n", file.getName());
+                Base.delFiles(file);
+            }
+        }
+
     }
 
     public void readDiary() {
 
-        File file = new File("diarys/" + date);
-        if (!file.exists()) {
-            System.out.printf("该日期对应文件夹 (%s) 不存在\n", file.getPath());
-        } else {
+        File diarysFile = new File("diarys/");
+        File[] filesInDiarysFile = diarysFile.listFiles();
 
-            File[] files = file.listFiles();
+        for (File file : Objects.requireNonNull(filesInDiarysFile)) {
+            //当 file 是文件夹且 date 对的上时
+            if (file.isDirectory() && file.getName().substring(0, 8).equals(date)) {
 
-            if (Objects.requireNonNull(files).length != 0) {
-                for (File f : files) {
+                System.out.printf("已找到 %s 文件夹，正在读取\n", file.getName());
+                time = file.getName().substring(file.getName().length() - 4);
+                File[] files = file.listFiles();
 
+                for (File f : Objects.requireNonNull(files)) {
                     if (f.getName().endsWith(".txt")) {
+                        titleString = f.getName().substring(0, f.getName().length() - 4);
                         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(f))) {
                             String line;
                             while ((line = bufferedReader.readLine()) != null) {
-                                text = text.concat(line + "\n");
+                                textString = textString.concat(line + "\n");
                             }
-                            title = f.getName().substring(0, f.getName().length() - 4);
+
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    }
-                    //TODO: 添加图片显示功能
-                    /*else if (f.getName().endsWith(".jpg") || f.getName().endsWith(".png")) {
-                        images[imageIndex] = new Image("file:/diarys" + date + "/" + f.getName());
-                        images_name[imageIndex] = f.getName().substring(0, f.getName().length() - 4);
-                        imageIndex++;
-                    }*/
-                    else {
-                        System.out.println("哪来的垃圾？");
+                    } else {
+                        System.out.printf("哪来的 \"%s\" 垃圾？\n", f.getName());
                     }
                 }
-            } else {
-                System.out.println("该日期对应文件夹下无文件");
+
             }
         }
     }
 
-    public void deleteDiary() {
-        File file = new File("diarys/" + date);
-        if (!file.exists()) {
-            System.out.printf("该日期对应文件夹 (%s) 不存在\n", file.getPath());
-        } else {
-            System.out.printf("该日期对应文件夹 (%s) 存在\n", file.getPath());
-            if (Base.delFiles(file)) {
-                System.out.printf("该日期对应文件夹 (%s) 已删除\n", file.getPath());
-            } else {
-                System.out.println("未删除");
+
+    public void transportDiary(String toDate) {
+
+        File diarysFile = new File("diarys/");
+        File[] filesInDiarysFile = diarysFile.listFiles();
+
+        for (File file : Objects.requireNonNull(filesInDiarysFile)) {
+            //当 file 是文件夹且 date 对的上时
+            if (file.isDirectory() && file.getName().substring(0, 8).equals(date)) {
+
+                Diary newDiary = new Diary(toDate);
+                newDiary.titleString = titleString;
+                newDiary.textString = textString;
+                newDiary.saveDiary();
+                deleteDiary();
+
+                System.out.printf("%s 已转移至 %s", date, toDate);
             }
         }
+
     }
 
     public boolean isDateExisted(String date) {
-        File file = new File("diarys");
+
+        File file = new File("diarys/");
         File[] files = file.listFiles();
+
         for (File f : Objects.requireNonNull(files)) {
             if (f.isDirectory() && Objects.equals(date, f.getName().substring(0, 8))) {
                 return true;
             }
         }
         return false;
+
     }
 
     public String[] textToStrings() {
-        return text.split("\n");
+        return textString.split("\n");
     }
 
     public String stringsToText(String[] strings) {

@@ -26,26 +26,30 @@ public class Page extends Application {
     double x_stage;
     double y_stage;
 
-    String date;
-    String[] str;
+    Diary diaryInPage;
 
     public Page(String date) {
-        this.date = date;
-        this.str = new Diary(date).textToStrings();
+        diaryInPage = new Diary(date);
+        diaryInPage.readDiary();
     }
 
+    //无参构造函数寻找最新一篇，没有日记则显示默认日记
     public Page() {
-        File[] files = new File("diarys/").listFiles();
-        if (Objects.requireNonNull(files).length != 0) {
-            for (File file : files) {
-                if (file.isDirectory() && Base.isDate(file.getName())) {
-                    this.date = file.getName();
-                    this.str = new Diary(date).textToStrings();
+
+        File diarysFile = new File("diarys/");
+        File[] filesInDiarysFile = diarysFile.listFiles();
+
+        diaryInPage = new Diary(DEFAULT_DATE);
+        diaryInPage.textString = "你还没有写过日记。";
+
+        if (filesInDiarysFile != null) {
+            for (File file : filesInDiarysFile) {
+                //当 file 是文件夹时
+                if (file.isDirectory()) {
+                    diaryInPage = new Diary(file.getName().substring(0, 8));
+                    diaryInPage.readDiary();
                 }
             }
-        } else {
-            this.date = "197801010600";
-            this.str = new String[]{"你还没有写过日记。"};
         }
 
     }
@@ -97,7 +101,7 @@ public class Page extends Application {
         close.setOnMouseClicked(mouseEvent -> stage.close());
 
         //标题底衬
-        Label title = new Label(APP_NAME + " - " + date + " - " + new Diary(date).title);
+        Label title = new Label(APP_NAME + " - " + diaryInPage.date + " - " + diaryInPage.titleString);
         title.setFont(FONT_SC_NORMAL);
         title.setTextFill(Color.LIGHTGRAY);
         HBox Title = new HBox(title);
@@ -175,23 +179,23 @@ public class Page extends Application {
         UpMiddle.setBorder(new Border(new BorderStroke(PAINT_DARK, PAINT_DARK, PAINT_LIGHTDARK, PAINT_DARK, BorderStrokeStyle.NONE, BorderStrokeStyle.NONE, BorderStrokeStyle.SOLID, BorderStrokeStyle.NONE, CornerRadii.EMPTY, BorderWidths.DEFAULT, Insets.EMPTY)));
 
         Pane pane = new Pane();
-        String dateformat = date.substring(0, 4) + "-" + date.substring(4, 6) + "-" + date.substring(6, 8);
+        String dateformat = diaryInPage.date.substring(0, 4) + "-" + diaryInPage.date.substring(4, 6) + "-" + diaryInPage.date.substring(6, 8);
 
-        Text up = new Text(date.substring(0, 4) + "年，" + Integer.valueOf(date.substring(4, 6)) + "月");
+        Text up = new Text(diaryInPage.date.substring(0, 4) + "年，" + Integer.valueOf(diaryInPage.date.substring(4, 6)) + "月");
         up.setFont(new Font(FONT_SC_MEDIUM.getName(), 15));
         up.setFill(PAINT_GRAY);
         up.setSmooth(true);
         up.setLayoutX((0.54 * HOMEPAGE_WIDTH - up.getBoundsInLocal().getWidth()) / 2);
         up.setLayoutY(40);
 
-        Text middle = new Text(Integer.valueOf(date.substring(6, 8)).toString());
+        Text middle = new Text(Integer.valueOf(diaryInPage.date.substring(6, 8)).toString());
         middle.setFont(new Font(FONT_SC_BOLD.getName(), 50));
         middle.setFill(PAINT_GRAY);
         middle.setSmooth(true);
         middle.setLayoutX((0.54 * HOMEPAGE_WIDTH - middle.getBoundsInLocal().getWidth()) / 2);
         middle.setLayoutY(90);
 
-        Text down = new Text(Base.dateToWeek(dateformat) + "  " + date.substring(8, 10) + ":" + date.substring(10, 12));
+        Text down = new Text(Base.dateToWeek(dateformat) + "  " + diaryInPage.time.substring(0, 2) + ":" + diaryInPage.time.substring(2, 4));
         down.setFont(new Font(FONT_SC_REGULAR.getName(), 15));
         down.setFill(PAINT_GRAY);
         down.setSmooth(true);
@@ -213,7 +217,7 @@ public class Page extends Application {
         DownMiddle.setSpacing(8);
 
 
-        for (String s : str) {
+        for (String s : diaryInPage.textToStrings()) {
             HBox hBox = new HBox();
 
             if (Base.isTimeLabel(s)) {
@@ -305,18 +309,18 @@ public class Page extends Application {
         delete.setLayoutX(0.2 * HOMEPAGE_WIDTH + 35);
         delete.setLayoutY(HOMEPAGE_HEIGHT - 35);
         delete.setOnMousePressed(mouseEvent -> {
-            if (!Objects.equals(date, "197801010600")) {
+            if (!Objects.equals(diaryInPage.date, DEFAULT_DATE)) {
                 delete.setBackground(new Background(new BackgroundImage(DELETE_PRESSED, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(30, 30, false, false, false, false))));
             }
         });
         delete.setOnMouseReleased(mouseEvent -> delete.setBackground(new Background(new BackgroundImage(DELETE_UNPRESSED, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(30, 30, false, false, false, false)))));
         delete.setOnMouseExited(mouseEvent -> delete.setBackground(new Background(new BackgroundImage(DELETE_UNPRESSED, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(30, 30, false, false, false, false)))));
         delete.setOnMouseClicked(mouseEvent -> {
-            if (!Objects.equals(date, "197801010600")) {
+            if (!Objects.equals(diaryInPage.date, DEFAULT_DATE)) {
                 stage.setOpacity(0.6);
                 if (AlertWindow.display("删除确认", "是否删除")) {
                     if (PasswordWindow.display()) {
-                        new Diary(date).deleteDiary();
+                        diaryInPage.deleteDiary();
                         stage.close();
                         new Page().start(new Stage());
                     }
@@ -333,17 +337,17 @@ public class Page extends Application {
         edit.setLayoutX(0.8 * HOMEPAGE_WIDTH - 65);
         edit.setLayoutY(HOMEPAGE_HEIGHT - 35);
         edit.setOnMousePressed(mouseEvent -> {
-            if (!Objects.equals(date, "197801010600")) {
+            if (!Objects.equals(diaryInPage.date, DEFAULT_DATE)) {
                 edit.setBackground(new Background(new BackgroundImage(EDIT_PRESSED, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(30, 30, false, false, false, false))));
             }
         });
         edit.setOnMouseReleased(mouseEvent -> edit.setBackground(new Background(new BackgroundImage(EDIT_UNPRESSED, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(30, 30, false, false, false, false)))));
         edit.setOnMouseExited(mouseEvent -> edit.setBackground(new Background(new BackgroundImage(EDIT_UNPRESSED, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(30, 30, false, false, false, false)))));
         edit.setOnMouseClicked(mouseEvent -> {
-            if (!Objects.equals(date, "197801010600")) {
+            if (!Objects.equals(diaryInPage.date, DEFAULT_DATE)) {
                 stage.close();
-                new Editor(date).display();
-                new Page(date).start(new Stage());
+                new Editor(diaryInPage.date).display();
+                new Page().start(new Stage());
             }
         });
 

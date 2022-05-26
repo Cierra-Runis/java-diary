@@ -5,6 +5,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -22,19 +23,18 @@ import static pers.cierra_runis.diary.SystemInfo.*;
 
 public class Editor {
 
-    static String date;
-    static String title;
-    static String text;
+    Diary diaryInEditor;
+    String toDate;
 
     double x1;
     double y1;
     double x_stage;
     double y_stage;
 
-    public Editor(String inputDate) {
-        date = inputDate;
-        title = new Diary(inputDate).title;
-        text = new Diary(inputDate).text;
+    public Editor(String date) {
+        diaryInEditor = new Diary(date);
+        diaryInEditor.readDiary();
+        toDate = diaryInEditor.date;
     }
 
     public void display() {
@@ -68,7 +68,17 @@ public class Editor {
         cancel.getChildren().add(textInCancelButton);
         cancel.setOnMouseClicked(mouseEvent -> stage.close());
 
-        TextField textField = new TextField(title);
+        Button changeDate = new Button("");
+        changeDate.setPrefWidth(30);
+        changeDate.setPrefHeight(30);
+        changeDate.setAlignment(Pos.CENTER);
+        changeDate.setBackground(new Background(new BackgroundImage(DATE, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(30, 30, false, false, false, false))));
+        changeDate.setLayoutX(EDITOR_WIDTH - 135);
+        changeDate.setLayoutY(EDITOR_HEIGHT - 35);
+        changeDate.setOnMouseClicked(mouseEvent -> diaryInEditor.date = DateWindow.display());
+
+
+        TextField textField = new TextField(diaryInEditor.titleString);
         textField.setPrefWidth(150);
         textField.setPrefHeight(0.8 * DATE_HEIGHT);
         textField.setLayoutX((EDITOR_WIDTH - 150) / 2);
@@ -101,7 +111,7 @@ public class Editor {
         textArea.setLayoutY(40);
         textArea.setPrefWidth(0.8 * EDITOR_WIDTH);
         textArea.setPrefHeight(EDITOR_HEIGHT - 40 - 40);
-        textArea.setText(text);
+        textArea.setText(diaryInEditor.textString);
         textArea.setFocusTraversable(Objects.equals(textArea.getText(), "") || textArea.getText() == null);
         textArea.setWrapText(true);
         textArea.setBackground(BG_DARK);
@@ -110,8 +120,13 @@ public class Editor {
         textArea.setFont(new Font(FONT_SC_NORMAL.getName(), 15));
 
         save.setOnMouseClicked(mouseEvent -> {
-            Diary newDiary = new Diary(date);
-            newDiary.saveDiary(textField.getText(), textArea.getText());
+            diaryInEditor.time = Base.backTime();
+            diaryInEditor.titleString = textArea.getText();
+            diaryInEditor.textString = textArea.getText();
+            diaryInEditor.saveDiary();
+            if (!Objects.equals(diaryInEditor.date, toDate)) {
+                diaryInEditor.transportDiary(toDate);
+            }
             stage.close();
         });
 
@@ -128,6 +143,7 @@ public class Editor {
         group.getChildren().add(textField);
         group.getChildren().add(save);
         group.getChildren().add(cancel);
+        group.getChildren().add(changeDate);
 
         Scene scene = new Scene(group);
         scene.getStylesheets().add("file:src/main/resources/" + "pers/cierra_runis/diary/textarea.css");

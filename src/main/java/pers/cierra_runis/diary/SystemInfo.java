@@ -27,6 +27,7 @@ public class SystemInfo {
 
     static String PASSWORD = "114";
     static String APP_NAME = "我的日记";
+    static String DEFAULT_DATE = "19000101";
 
     static Image ICON = new Image("file:src/main/resources/" + "icon/Icon.png");
     static Image SETTING = new Image("file:src/main/resources/" + "icon/Setting.png");
@@ -41,7 +42,6 @@ public class SystemInfo {
     static Image CONFIRM = new Image("file:src/main/resources/" + "icon/Confirm.png");
     static Image EDIT_UNPRESSED = new Image("file:src/main/resources/" + "icon/Edit_Unpressed.png");
     static Image EDIT_PRESSED = new Image("file:src/main/resources/" + "icon/Edit_Pressed.png");
-
     static Font FONT_SC_BOLD = Font.loadFont("file:src/main/resources/" + "font/SourceHanSansCN-Bold.ttf", 12);
     static Font FONT_SC_EXTRALIGHT = Font.loadFont("file:src/main/resources/" + "font/SourceHanSansCN-ExtraLight.ttf", 12);
     static Font FONT_SC_HEAVY = Font.loadFont("file:src/main/resources/" + "font/SourceHanSansCN-Heavy.ttf", 12);
@@ -49,7 +49,6 @@ public class SystemInfo {
     static Font FONT_SC_MEDIUM = Font.loadFont("file:src/main/resources/" + "font/SourceHanSansCN-Medium.ttf", 12);
     static Font FONT_SC_NORMAL = Font.loadFont("file:src/main/resources/" + "font/SourceHanSansCN-Normal.ttf", 12);
     static Font FONT_SC_REGULAR = Font.loadFont("file:src/main/resources/" + "font/SourceHanSansCN-Regular.ttf", 12);
-
     static Paint PAINT_DARK = Paint.valueOf("#333333");
     static Paint PAINT_DARKER = Paint.valueOf("#21252B");
     static Paint PAINT_RED = Paint.valueOf("#E81123");
@@ -57,20 +56,16 @@ public class SystemInfo {
     static Paint PAINT_GRAY = Paint.valueOf("#DDDDDD");
     static Paint PAINT_LIGHTDARK = Paint.valueOf("#666666");
     static Paint PAINT_LIGHTBLUE = Paint.valueOf("#8AB4F8");
-
     static BackgroundFill BG_DARK_FILL = new BackgroundFill(PAINT_DARK, new CornerRadii(8), new Insets(0));
     static Background BG_DARK = new Background(BG_DARK_FILL);
-
     static BackgroundFill BG_DARKER_FILL = new BackgroundFill(PAINT_DARKER, new CornerRadii(8), new Insets(0));
     static Background BG_DARKER = new Background(BG_DARKER_FILL);
-
     static BackgroundFill BG_RED_FILL = new BackgroundFill(PAINT_RED, new CornerRadii(8), new Insets(0));
     static Background BG_RED = new Background(BG_RED_FILL);
-
     static BackgroundFill BG_PINK_FILL = new BackgroundFill(PAINT_PINK, new CornerRadii(8), new Insets(0));
     static Background BG_PINK = new Background(BG_PINK_FILL);
-
     static BackgroundFill BG_GRAY_FILL = new BackgroundFill(PAINT_GRAY, new CornerRadii(8), new Insets(0));
     static Background BG_GRAY = new Background(BG_GRAY_FILL);
+
 
 }
