@@ -97,7 +97,7 @@ public class Page extends Application {
         close.setOnMouseClicked(mouseEvent -> stage.close());
 
         //标题底衬
-        Label title = new Label(APP_NAME + " - " + date);
+        Label title = new Label(APP_NAME + " - " + date + " - " + new Diary(date).title);
         title.setFont(FONT_SC_NORMAL);
         title.setTextFill(Color.LIGHTGRAY);
         HBox Title = new HBox(title);
@@ -275,7 +275,7 @@ public class Page extends Application {
         });
         Middle.setOnScroll(scrollEvent -> {
 
-            y1 -= scrollEvent.getDeltaY();
+            y1 = -scrollEvent.getDeltaY();
             y_stage = Middle.getLayoutY();
 
             if ((HOMEPAGE_HEIGHT - UpMiddle.getHeight() - DownMiddle.getHeight() - 50) >= 30) {
@@ -289,9 +289,6 @@ public class Page extends Application {
                     Middle.setLayoutY(30);
                 }
             }
-
-            y1 = 0;
-
         });
         Middle.setOnMousePressed(mouseEvent -> {
             y1 = mouseEvent.getScreenY();

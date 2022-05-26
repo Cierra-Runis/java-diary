@@ -56,6 +56,7 @@ public class SystemInfo {
     static Paint PAINT_PINK = Paint.valueOf("#F1707A");
     static Paint PAINT_GRAY = Paint.valueOf("#DDDDDD");
     static Paint PAINT_LIGHTDARK = Paint.valueOf("#666666");
+    static Paint PAINT_LIGHTBLUE = Paint.valueOf("#8AB4F8");
 
     static BackgroundFill BG_DARK_FILL = new BackgroundFill(PAINT_DARK, new CornerRadii(8), new Insets(0));
     static Background BG_DARK = new Background(BG_DARK_FILL);
@@ -71,8 +72,5 @@ public class SystemInfo {
 
     static BackgroundFill BG_GRAY_FILL = new BackgroundFill(PAINT_GRAY, new CornerRadii(8), new Insets(0));
     static Background BG_GRAY = new Background(BG_GRAY_FILL);
-
-    static BackgroundFill BG_LIGHTDARK_FILL = new BackgroundFill(PAINT_LIGHTDARK, new CornerRadii(8), new Insets(0));
-    static Background BG_LIGHTDARK = new Background(BG_LIGHTDARK_FILL);
 
 }

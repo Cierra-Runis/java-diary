@@ -23,17 +23,23 @@ public class Diary {
         }
     }
 
-    public void saveDiary(String title, String text) {
+    public void saveDiary(String inputTitle, String inputText) {
 
-        File dir = new File("diarys/" + date);
+        if (isDateExisted(date.substring(0, 8))) {
+            System.out.println("删 " + date + " 啊");
+            Base.delFiles(new File("diarys/" + date));
+        }
+
+
+        File dir = new File("diarys/");
         if (dir.mkdir()) {
             System.out.println("文件夹创建成功");
         }
-        File file = new File("diarys/" + date + "/" + title + ".txt");
+        File file = new File("diarys/" + date + "/" + inputTitle + ".txt");
         try {
             FileWriter fileWriter = new FileWriter(file);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            bufferedWriter.write(text);
+            bufferedWriter.write(inputText);
             bufferedWriter.close();
             fileWriter.close();
         } catch (IOException e) {
