@@ -102,13 +102,14 @@ public class Diary {
             //当 file 是文件夹且 date 对的上时
             if (file.isDirectory() && file.getName().substring(0, 8).equals(date)) {
 
-                Diary newDiary = new Diary(toDate);
+                //Q: 这里逻辑我晕了
+                Diary newDiary = new Diary(date);
                 newDiary.titleString = titleString;
                 newDiary.textString = textString;
                 newDiary.saveDiary();
-                deleteDiary();
+                new Diary(toDate).deleteDiary();
 
-                System.out.printf("%s 已转移至 %s", date, toDate);
+                System.out.printf("%s 已转移至 %s\n", date, toDate);
             }
         }
 
@@ -130,14 +131,6 @@ public class Diary {
 
     public String[] textToStrings() {
         return textString.split("\n");
-    }
-
-    public String stringsToText(String[] strings) {
-        String result = "";
-        for (String string : strings) {
-            result = result.concat(string + "\n");
-        }
-        return result;
     }
 
 }

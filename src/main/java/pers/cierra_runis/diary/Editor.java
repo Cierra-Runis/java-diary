@@ -23,8 +23,8 @@ import static pers.cierra_runis.diary.SystemInfo.*;
 
 public class Editor {
 
-    Diary diaryInEditor;
-    String toDate;
+    final Diary diaryInEditor;
+    final String toDate;
 
     double x1;
     double y1;
@@ -127,6 +127,7 @@ public class Editor {
             if (!Objects.equals(diaryInEditor.date, toDate)) {
                 diaryInEditor.transportDiary(toDate);
             }
+            System.out.println("保存成功");
             stage.close();
         });
 

@@ -42,6 +42,8 @@ public class Page extends Application {
         diaryInPage = new Diary(DEFAULT_DATE);
         diaryInPage.textString = "你还没有写过日记。";
 
+        System.out.println("正在寻找最新一篇日记");
+
         if (filesInDiarysFile != null) {
             for (File file : filesInDiarysFile) {
                 //当 file 是文件夹时
@@ -56,6 +58,10 @@ public class Page extends Application {
 
     @Override
     public void start(Stage stage) {
+
+        if (Objects.equals(diaryInPage.date, DEFAULT_DATE)) {
+            System.out.println("你还没有写过日记。");
+        }
 
         //标题左部
         Button setting = new Button("");
@@ -345,9 +351,11 @@ public class Page extends Application {
         edit.setOnMouseExited(mouseEvent -> edit.setBackground(new Background(new BackgroundImage(EDIT_UNPRESSED, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(30, 30, false, false, false, false)))));
         edit.setOnMouseClicked(mouseEvent -> {
             if (!Objects.equals(diaryInPage.date, DEFAULT_DATE)) {
-                stage.close();
+                stage.setOpacity(0);
+                System.out.printf("你想编辑 %s 的日记\n", diaryInPage.date);
                 new Editor(diaryInPage.date).display();
                 new Page().start(new Stage());
+                stage.close();
             }
         });
 
