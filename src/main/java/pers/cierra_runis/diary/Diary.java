@@ -20,7 +20,7 @@ public class Diary {
 
         //如果这个类的 date 已经存在，那么我们删去原先的
         //对于 添加日记 已在 DateWindow 保证上述情形不存在，这是为了 编辑日记 而编写的
-        if (isDateExisted(date)) {
+        if (Base.isDateExisted(date)) {
             System.out.printf("所想保存日记的 timeStamp (%s) 对应的 date 已经存在，正在删除原先日记\n", date + time);
             deleteDiary();
         }
@@ -68,7 +68,7 @@ public class Diary {
             if (file.isDirectory() && file.getName().substring(0, 8).equals(date)) {
 
                 System.out.printf("已找到 %s 文件夹，正在读取\n", file.getName());
-                time = file.getName().substring(file.getName().length() - 4);
+                time = file.getName().substring(file.getName().length() - 6);
                 File[] files = file.listFiles();
 
                 for (File f : Objects.requireNonNull(files)) {
@@ -115,19 +115,6 @@ public class Diary {
 
     }
 
-    public boolean isDateExisted(String date) {
-
-        File file = new File("diarys/");
-        File[] files = file.listFiles();
-
-        for (File f : Objects.requireNonNull(files)) {
-            if (f.isDirectory() && Objects.equals(date, f.getName().substring(0, 8))) {
-                return true;
-            }
-        }
-        return false;
-
-    }
 
     public String[] textToStrings() {
         return textString.split("\n");

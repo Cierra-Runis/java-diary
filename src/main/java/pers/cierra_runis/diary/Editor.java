@@ -26,6 +26,8 @@ public class Editor {
     final Diary diaryInEditor;
     final String toDate;
 
+    boolean edited = false;
+
     double x1;
     double y1;
     double x_stage;
@@ -37,7 +39,8 @@ public class Editor {
         toDate = diaryInEditor.date;
     }
 
-    public void display() {
+    public boolean display() {
+
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
 
@@ -66,7 +69,10 @@ public class Editor {
         cancel.setLayoutY(3);
         cancel.setAlignment(Pos.CENTER);
         cancel.getChildren().add(textInCancelButton);
-        cancel.setOnMouseClicked(mouseEvent -> stage.close());
+        cancel.setOnMouseClicked(mouseEvent -> {
+            edited = false;
+            stage.close();
+        });
 
         Button changeDate = new Button("");
         changeDate.setPrefWidth(30);
@@ -128,6 +134,7 @@ public class Editor {
                 diaryInEditor.transportDiary(toDate);
             }
             System.out.println("保存成功");
+            edited = true;
             stage.close();
         });
 
@@ -168,6 +175,8 @@ public class Editor {
 
         //显示
         stage.showAndWait();
+
+        return edited;
     }
 
 }

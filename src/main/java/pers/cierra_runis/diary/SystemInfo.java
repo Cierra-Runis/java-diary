@@ -13,7 +13,7 @@ import javafx.stage.Screen;
 public class SystemInfo {
 
     static final Rectangle2D rectangle2D = Screen.getPrimary().getBounds();
-    
+
     static final double SCREEN_WIDTH = rectangle2D.getWidth();
     static final double PASSWORD_WIDTH = 0.9 * SCREEN_WIDTH * 25 / 192;
     static final double HOMEPAGE_WIDTH = SCREEN_WIDTH * 160 / 192;
@@ -43,6 +43,7 @@ public class SystemInfo {
     static final Image CONFIRM = new Image("file:src/main/resources/" + "icon/Confirm.png");
     static final Image EDIT_UNPRESSED = new Image("file:src/main/resources/" + "icon/Edit_Unpressed.png");
     static final Image EDIT_PRESSED = new Image("file:src/main/resources/" + "icon/Edit_Pressed.png");
+    static final Image CANCEL = new Image("file:src/main/resources/" + "icon/Cancel.png");
 
     static final Font FONT_SC_BOLD = Font.loadFont("file:src/main/resources/" + "font/SourceHanSansCN-Bold.ttf", 12);
     static final Font FONT_SC_HEAVY = Font.loadFont("file:src/main/resources/" + "font/SourceHanSansCN-Heavy.ttf", 12);
@@ -72,6 +73,5 @@ public class SystemInfo {
 
     static final BackgroundFill BG_GRAY_FILL = new BackgroundFill(PAINT_GRAY, new CornerRadii(8), new Insets(0));
     static final Background BG_GRAY = new Background(BG_GRAY_FILL);
-
 
 }

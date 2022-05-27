@@ -151,8 +151,11 @@ public class Page extends Application {
             String dateFromDateWindow = DateWindow.display();
             stage.close();
             if (dateFromDateWindow != null && !dateFromDateWindow.equals("")) {
-                new Editor(dateFromDateWindow).display();
-                new Page(dateFromDateWindow).start(new Stage());
+                if (new Editor(dateFromDateWindow).display()) {
+                    new Page(dateFromDateWindow).start(new Stage());
+                } else {
+                    new Page().start(new Stage());
+                }
             } else {
                 new Page().start(new Stage());
             }
@@ -325,11 +328,9 @@ public class Page extends Application {
             if (!Objects.equals(diaryInPage.date, DEFAULT_DATE)) {
                 stage.setOpacity(0.6);
                 if (AlertWindow.display("删除确认", "是否删除")) {
-                    if (PasswordWindow.display()) {
-                        diaryInPage.deleteDiary();
-                        stage.close();
-                        new Page().start(new Stage());
-                    }
+                    diaryInPage.deleteDiary();
+                    stage.close();
+                    new Page().start(new Stage());
                 }
                 stage.setOpacity(0.9);
             }

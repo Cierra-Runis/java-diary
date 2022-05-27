@@ -5,7 +5,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
@@ -165,30 +164,37 @@ public class DateWindow {
             } else {
 
                 String enteredDate = year.getText() + month.getText() + day.getText();
-                String timeStamp = enteredDate + "000000";
-                if (Base.isTimeStamp(timeStamp)) {
-                    date = enteredDate;
-                    stage.close();
+                if (!Base.isDateExisted(enteredDate)) {
+                    String timeStamp = enteredDate + "000000";
+                    if (Base.isTimeStamp(timeStamp)) {
+                        date = enteredDate;
+                        stage.close();
+                    } else {
+                        System.out.println("注意！");
+                    }
                 } else {
-                    System.out.println("注意！");
+                    System.out.printf("选择的 %s 已存在日记\n", enteredDate);
+                    year.setText("");
+                    month.setText("");
+                    day.setText("");
+                    year.requestFocus();
                 }
 
             }
         });
 
         //底衬
-        Label label = new Label("");
-        HBox Label = new HBox(label);
-        Label.setLayoutX(0);
-        Label.setLayoutY(0);
-        Label.setPrefWidth(DATE_WIDTH);
-        Label.setPrefHeight(DATE_HEIGHT);
-        Label.setBackground(BG_DARKER);
-        Label.setAlignment(Pos.CENTER);
+        HBox Body = new HBox();
+        Body.setLayoutX(0);
+        Body.setLayoutY(0);
+        Body.setPrefWidth(DATE_WIDTH);
+        Body.setPrefHeight(DATE_HEIGHT);
+        Body.setBackground(BG_DARKER);
+        Body.setAlignment(Pos.CENTER);
 
 
         Group group = new Group();
-        group.getChildren().add(Label);
+        group.getChildren().add(Body);
         group.getChildren().add(AutoFill);
         group.getChildren().add(year);
         group.getChildren().add(month);

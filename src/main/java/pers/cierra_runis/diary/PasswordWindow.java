@@ -15,7 +15,8 @@ import java.util.Objects;
 import static pers.cierra_runis.diary.SystemInfo.*;
 
 public class PasswordWindow {
-    public static boolean result;
+
+    public static boolean result = false;
 
     public static boolean display() {
         Stage stage = new Stage();

@@ -93,4 +93,18 @@ public class Base {
         return hour + minute + second;
     }
 
+    public static boolean isDateExisted(String date) {
+
+        File file = new File("diarys/");
+        File[] files = file.listFiles();
+
+        for (File f : Objects.requireNonNull(files)) {
+            if (f.isDirectory() && Objects.equals(date, f.getName().substring(0, 8))) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
 }
