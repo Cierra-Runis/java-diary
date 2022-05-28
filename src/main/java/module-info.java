@@ -9,7 +9,10 @@ module pers.cierra_runis.diary {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
+    requires com.google.gson;
+    requires java.net.http;
 
     opens pers.cierra_runis.diary to javafx.fxml;
+
     exports pers.cierra_runis.diary;
 }
