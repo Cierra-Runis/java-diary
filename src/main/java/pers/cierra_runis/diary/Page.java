@@ -1,8 +1,10 @@
 package pers.cierra_runis.diary;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -13,6 +15,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import pers.cierra_runis.diary.api.HitokotoResponse;
 
 import java.util.Objects;
 
@@ -498,12 +501,45 @@ public class Page extends Application {
         Right.setLayoutY(30);
         Right.setBorder(new Border(new BorderStroke(PAINT_DARK, PAINT_DARK, PAINT_DARK, PAINT_LIGHTDARK, BorderStrokeStyle.NONE, BorderStrokeStyle.NONE, BorderStrokeStyle.NONE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT, Insets.EMPTY)));
 
+        VBox Hitokoto = new VBox();
+        Hitokoto.setLayoutX(0.81 * HOMEPAGE_WIDTH);
+        Hitokoto.setLayoutY(0.95 * HOMEPAGE_HEIGHT);
+        Hitokoto.setMaxWidth(0.18 * HOMEPAGE_WIDTH);
+        Hitokoto.setBorder(new Border(new BorderStroke(PAINT_DARK, PAINT_DARK, PAINT_LIGHTDARK, PAINT_DARK, BorderStrokeStyle.NONE, BorderStrokeStyle.NONE, BorderStrokeStyle.SOLID, BorderStrokeStyle.NONE, CornerRadii.EMPTY, BorderWidths.DEFAULT, Insets.EMPTY)));
+
+        Text sentence = new Text();
+        //线程相关由 谢佬（https://github.com/WOo0W） 提供帮助
+        Thread httpThread = new Thread(() -> {
+            try {
+                HitokotoResponse hitokotoResponse = HitokotoResponse.getHitokoto();
+                String hitokoto = hitokotoResponse.hitokoto;
+                String yurai = hitokotoResponse.from;
+                String uuid = hitokotoResponse.uuid;
+                Platform.runLater(() -> {
+                    sentence.setText("『 " + hitokoto + " 』" + "  ——  " + yurai);
+                    Hitokoto.setOnMouseClicked(event -> getHostServices().showDocument("https://hitokoto.cn/?uuid=" + uuid));
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        });
+        httpThread.start();
+
+        sentence.setFill(PAINT_GRAY);
+        sentence.setFont(FONT_SC_BOLD);
+        sentence.setSmooth(true);
+        sentence.setWrappingWidth(0.18 * HOMEPAGE_WIDTH);
+
+        Hitokoto.getChildren().add(sentence);
+
+        //背景
         HBox Body = new HBox();
         Body.setPrefWidth(HOMEPAGE_WIDTH);
         Body.setPrefHeight(HOMEPAGE_HEIGHT);
         Body.setBackground(BG_DARK);
 
-
+        //组
         Group group = new Group();
         group.getChildren().add(Body);
         group.getChildren().add(Left);
@@ -519,9 +555,14 @@ public class Page extends Application {
         group.getChildren().add(edit);
         group.getChildren().add(add);
         group.getChildren().add(sort);
+        group.getChildren().add(Hitokoto);
 
+        //设置 scene
         Scene scene = new Scene(group);
         scene.setFill(null);
+
+        Hitokoto.setOnMouseEntered(event -> scene.setCursor(Cursor.HAND));
+        Hitokoto.setOnMouseExited(event -> scene.setCursor(Cursor.DEFAULT));
 
         //定位
         stage.setX((SCREEN_WIDTH - HOMEPAGE_WIDTH) / 2);
