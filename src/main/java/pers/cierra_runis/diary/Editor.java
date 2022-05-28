@@ -126,16 +126,20 @@ public class Editor {
         textArea.setFont(new Font(FONT_SC_NORMAL.getName(), 15));
 
         save.setOnMouseClicked(mouseEvent -> {
-            diaryInEditor.time = Base.backTime();
-            diaryInEditor.titleString = textField.getText();
-            diaryInEditor.textString = textArea.getText();
-            diaryInEditor.saveDiary();
-            if (!Objects.equals(diaryInEditor.date, toDate)) {
-                diaryInEditor.transportDiary(toDate);
+            if (Objects.equals(textField.getText(), "")) {
+                textField.requestFocus();
+            } else {
+                diaryInEditor.time = Base.backTime();
+                diaryInEditor.titleString = textField.getText();
+                diaryInEditor.textString = textArea.getText();
+                diaryInEditor.saveDiary();
+                if (!Objects.equals(diaryInEditor.date, toDate)) {
+                    diaryInEditor.transportDiary(toDate);
+                }
+                System.out.println("保存成功");
+                edited = true;
+                stage.close();
             }
-            System.out.println("保存成功");
-            edited = true;
-            stage.close();
         });
 
 

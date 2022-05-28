@@ -25,8 +25,6 @@ public class Page extends Application {
     double x_stage;
     double y_stage;
 
-    boolean newToOld = true;
-
     Diary diaryInPage;
     Diary[] diaries;
 
@@ -264,6 +262,21 @@ public class Page extends Application {
             } else {
                 new Page().start(new Stage());
             }
+        });
+
+        Button sort = new Button();
+        sort.setPrefWidth(30);
+        sort.setPrefHeight(30);
+        sort.setAlignment(Pos.CENTER);
+        sort.setBackground(new Background(new BackgroundImage(newToOld ? SORTDOWN_UNPRESSED : SORTUP_UNPRESSED, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(30, 30, false, false, false, false))));
+        sort.setLayoutX(240);
+        sort.setLayoutY(35);
+        sort.setOnMousePressed(mouseEvent -> sort.setBackground(new Background(new BackgroundImage(newToOld ? SORTDOWN_PRESSED : SORTUP_PRESSED, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(30, 30, false, false, false, false)))));
+        sort.setOnMouseExited(mouseEvent -> sort.setBackground(new Background(new BackgroundImage(newToOld ? SORTDOWN_UNPRESSED : SORTUP_UNPRESSED, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(30, 30, false, false, false, false)))));
+        sort.setOnMouseClicked(mouseEvent -> {
+            newToOld = !newToOld;
+            stage.close();
+            new Page(diaryInPage.date).start(new Stage());
         });
 
         //工具底衬
@@ -505,6 +518,7 @@ public class Page extends Application {
         group.getChildren().add(delete);
         group.getChildren().add(edit);
         group.getChildren().add(add);
+        group.getChildren().add(sort);
 
         Scene scene = new Scene(group);
         scene.setFill(null);

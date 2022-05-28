@@ -44,6 +44,11 @@ public class SystemInfo {
     static final Image EDIT_UNPRESSED = new Image("file:src/main/resources/" + "icon/Edit_Unpressed.png");
     static final Image EDIT_PRESSED = new Image("file:src/main/resources/" + "icon/Edit_Pressed.png");
     static final Image CANCEL = new Image("file:src/main/resources/" + "icon/Cancel.png");
+    static final Image SORTUP_PRESSED = new Image("file:src/main/resources/" + "icon/SortUp_Pressed.png");
+    static final Image SORTUP_UNPRESSED = new Image("file:src/main/resources/" + "icon/SortUp_Unpressed.png");
+    static final Image SORTDOWN_PRESSED = new Image("file:src/main/resources/" + "icon/SortDown_Pressed.png");
+    static final Image SORTDOWN_UNPRESSED = new Image("file:src/main/resources/" + "icon/SortDown_Unpressed.png");
+
 
     static final Font FONT_SC_BOLD = Font.loadFont("file:src/main/resources/" + "font/SourceHanSansCN-Bold.ttf", 12);
     static final Font FONT_SC_HEAVY = Font.loadFont("file:src/main/resources/" + "font/SourceHanSansCN-Heavy.ttf", 12);
@@ -71,5 +76,7 @@ public class SystemInfo {
     static final Background BG_GRAY = new Background(new BackgroundFill(PAINT_GRAY, new CornerRadii(8), new Insets(0)));
 
     static final Background BG_CARD = new Background(new BackgroundFill(PAINT_CARD, new CornerRadii(8), new Insets(0)));
+
+    static boolean newToOld = true;
 
 }
