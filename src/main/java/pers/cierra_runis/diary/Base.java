@@ -107,4 +107,24 @@ public class Base {
 
     }
 
+    public static Diary[] getAllDiary() {
+
+        File diarysFile = new File("diarys/");
+        File[] filesInDiarysFile = diarysFile.listFiles();
+
+        if (filesInDiarysFile != null && filesInDiarysFile.length != 0) {
+            System.out.print("\n正在读取所有日记\n");
+            Diary[] diaries = new Diary[filesInDiarysFile.length];
+            for (int i = 0; i < filesInDiarysFile.length; i++) {
+                diaries[i] = new Diary(filesInDiarysFile[i].getName().substring(0, 8));
+                diaries[i].readDiary();
+            }
+            System.out.println();
+            return diaries;
+        } else {
+            return null;
+        }
+
+    }
+
 }

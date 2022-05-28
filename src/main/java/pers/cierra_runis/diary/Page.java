@@ -14,7 +14,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.io.File;
 import java.util.Objects;
 
 import static pers.cierra_runis.diary.SystemInfo.*;
@@ -26,32 +25,28 @@ public class Page extends Application {
     double x_stage;
     double y_stage;
 
+    boolean newToOld = true;
+
     Diary diaryInPage;
+    Diary[] diaries;
 
     public Page(String date) {
         diaryInPage = new Diary(date);
+        diaries = Base.getAllDiary();
         diaryInPage.readDiary();
     }
 
     //无参构造函数寻找最新一篇，没有日记则显示默认日记
     public Page() {
 
-        File diarysFile = new File("diarys/");
-        File[] filesInDiarysFile = diarysFile.listFiles();
-
         diaryInPage = new Diary(DEFAULT_DATE);
         diaryInPage.textString = "你还没有写过日记。";
 
         System.out.println("正在寻找最新一篇日记");
 
-        if (filesInDiarysFile != null) {
-            for (File file : filesInDiarysFile) {
-                //当 file 是文件夹时
-                if (file.isDirectory()) {
-                    diaryInPage = new Diary(file.getName().substring(0, 8));
-                    diaryInPage.readDiary();
-                }
-            }
+        diaries = Base.getAllDiary();
+        if (diaries != null) {
+            diaryInPage = diaries[diaries.length - 1];
         }
 
     }
@@ -128,13 +123,123 @@ public class Page extends Application {
 
         //左栏
         VBox Left = new VBox();
-        Left.setSpacing(8);
-        Left.setPrefWidth(0.2 * HOMEPAGE_WIDTH);
-        Left.setPrefHeight(HOMEPAGE_WIDTH * HOMEPAGE_HEIGHT);
-        Left.setLayoutX(0);
-        Left.setLayoutY(30);
+        Left.setLayoutX(0.01 * HOMEPAGE_WIDTH);
+        Left.setLayoutY(30 + 41);
+        Left.setPrefWidth(0.19 * HOMEPAGE_WIDTH);
+        Left.setPrefHeight(HOMEPAGE_HEIGHT * HOMEPAGE_WIDTH);
         Left.setBorder(new Border(new BorderStroke(PAINT_DARK, PAINT_LIGHTDARK, PAINT_DARK, PAINT_DARK, BorderStrokeStyle.NONE, BorderStrokeStyle.SOLID, BorderStrokeStyle.NONE, BorderStrokeStyle.NONE, CornerRadii.EMPTY, BorderWidths.DEFAULT, Insets.EMPTY)));
-        Left.setSpacing(8);
+
+        VBox LeftList = new VBox();
+        LeftList.setLayoutX(0);
+        LeftList.setLayoutY(450);
+        LeftList.setSpacing(8);
+
+        if (diaries != null) {
+
+            VBox blank = new VBox();
+            blank.setMaxHeight(8);
+            LeftList.getChildren().add(blank);
+
+            Diary[] list = new Diary[diaries.length];
+            if (!newToOld) {
+                list = diaries;
+            } else {
+                for (int i = 0; i < diaries.length; i++) {
+                    list[i] = diaries[diaries.length - i - 1];
+                }
+            }
+            for (Diary diary : list) {
+                HBox card = new HBox();
+                card.setMaxWidth(0.18 * HOMEPAGE_WIDTH);
+                card.setMinWidth(0.18 * HOMEPAGE_WIDTH);
+                card.setPrefHeight(85);
+
+                Text up = new Text();
+                if (diary.titleString.length() > 8) {
+                    up.setText(diary.titleString.substring(0, 8) + "…");
+                } else {
+                    up.setText(diary.titleString);
+                }
+                up.setSmooth(true);
+                up.setFont(new Font(FONT_SC_BOLD.getName(), 20));
+                up.setFill(PAINT_GRAY);
+                up.setLayoutX(20);
+                up.setLayoutY(28);
+
+                Text middle = new Text(diary.date.substring(0, 4) + "-" + diary.date.substring(4, 6) + "-" + diary.date.substring(6) + "  " + diary.time.substring(0, 2) + ":" + diary.time.substring(2, 4) + ":" + diary.time.substring(4));
+                middle.setSmooth(true);
+                middle.setFont(FONT_SC_BOLD);
+                middle.setFill(PAINT_GRAY);
+                middle.setLayoutX(20);
+                middle.setLayoutY(47);
+
+                Text down = new Text();
+                if (diary.textToStrings()[0].length() > 18) {
+                    down.setText(diary.textToStrings()[0].substring(0, 18) + "…");
+                } else {
+                    down.setText(diary.textToStrings()[0] + "…");
+                }
+                down.setSmooth(true);
+                down.setFont(FONT_SC_REGULAR);
+                down.setFill(PAINT_GRAY);
+                down.setLayoutX(20);
+                down.setLayoutY(65);
+
+                Pane pane = new Pane();
+                pane.setPrefWidth(0.18 * HOMEPAGE_WIDTH);
+                pane.setPrefHeight(80);
+                pane.setBackground(BG_CARD);
+                pane.getChildren().add(up);
+                pane.getChildren().add(middle);
+                pane.getChildren().add(down);
+
+                card.getChildren().add(pane);
+                card.setOnMouseClicked(event -> {
+                    stage.close();
+                    new Page(diary.date).start(new Stage());
+                });
+                LeftList.getChildren().add(card);
+            }
+        }
+        Left.getChildren().add(LeftList);
+
+        Left.setOnMouseDragged(mouseEvent -> {
+
+            if ((HOMEPAGE_HEIGHT - LeftList.getHeight() - 50) >= 30 + 41) {
+                System.out.println("不滑动");
+            } else {
+                Left.setLayoutY(y_stage + mouseEvent.getScreenY() - y1);
+                if (Left.getLayoutY() < (HOMEPAGE_HEIGHT - LeftList.getHeight() - 50)) {
+                    Left.setLayoutY(HOMEPAGE_HEIGHT - LeftList.getHeight() - 50);
+                }
+                if (Left.getLayoutY() > 30 + 41) {
+                    Left.setLayoutY(30 + 41);
+                }
+            }
+
+        });
+        Left.setOnScroll(scrollEvent -> {
+
+            y1 = -scrollEvent.getDeltaY();
+            y_stage = Left.getLayoutY();
+
+            if ((HOMEPAGE_HEIGHT - LeftList.getHeight() - 50) >= 30 + 41) {
+                System.out.println("不滑动");
+            } else {
+                Left.setLayoutY(y_stage + scrollEvent.getDeltaY() - y1);
+                if (Left.getLayoutY() < (HOMEPAGE_HEIGHT - LeftList.getHeight() - 50)) {
+                    Left.setLayoutY(HOMEPAGE_HEIGHT - 8 - LeftList.getHeight() - 50);
+                }
+                if (Left.getLayoutY() > 30 + 41) {
+                    Left.setLayoutY(30 + 41);
+                }
+            }
+        });
+        Left.setOnMousePressed(mouseEvent -> {
+            y1 = mouseEvent.getScreenY();
+            y_stage = Left.getLayoutY();
+        });
+
 
         //左部工具栏
         Button add = new Button("");

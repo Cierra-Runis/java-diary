@@ -58,20 +58,18 @@ public class SystemInfo {
     static final Paint PAINT_GRAY = Paint.valueOf("#DDDDDD");
     static final Paint PAINT_LIGHTDARK = Paint.valueOf("#666666");
     static final Paint PAINT_LIGHTBLUE = Paint.valueOf("#8AB4F8");
+    static final Paint PAINT_CARD = Paint.valueOf("#404040");
 
-    static final BackgroundFill BG_DARK_FILL = new BackgroundFill(PAINT_DARK, new CornerRadii(8), new Insets(0));
-    static final Background BG_DARK = new Background(BG_DARK_FILL);
+    static final Background BG_DARK = new Background(new BackgroundFill(PAINT_DARK, new CornerRadii(8), new Insets(0)));
 
-    static final BackgroundFill BG_DARKER_FILL = new BackgroundFill(PAINT_DARKER, new CornerRadii(8), new Insets(0));
-    static final Background BG_DARKER = new Background(BG_DARKER_FILL);
+    static final Background BG_DARKER = new Background(new BackgroundFill(PAINT_DARKER, new CornerRadii(8), new Insets(0)));
 
-    static final BackgroundFill BG_RED_FILL = new BackgroundFill(PAINT_RED, new CornerRadii(8), new Insets(0));
-    static final Background BG_RED = new Background(BG_RED_FILL);
+    static final Background BG_RED = new Background(new BackgroundFill(PAINT_RED, new CornerRadii(8), new Insets(0)));
 
-    static final BackgroundFill BG_PINK_FILL = new BackgroundFill(PAINT_PINK, new CornerRadii(8), new Insets(0));
-    static final Background BG_PINK = new Background(BG_PINK_FILL);
+    static final Background BG_PINK = new Background(new BackgroundFill(PAINT_PINK, new CornerRadii(8), new Insets(0)));
 
-    static final BackgroundFill BG_GRAY_FILL = new BackgroundFill(PAINT_GRAY, new CornerRadii(8), new Insets(0));
-    static final Background BG_GRAY = new Background(BG_GRAY_FILL);
+    static final Background BG_GRAY = new Background(new BackgroundFill(PAINT_GRAY, new CornerRadii(8), new Insets(0)));
+
+    static final Background BG_CARD = new Background(new BackgroundFill(PAINT_CARD, new CornerRadii(8), new Insets(0)));
 
 }
